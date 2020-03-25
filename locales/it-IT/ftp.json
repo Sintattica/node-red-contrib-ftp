@@ -1,0 +1,31 @@
+{
+    "ftp" : {
+        "label" : {
+            "host" : "Host",
+            "port" : "Porta",
+            "user" : "Utente",
+            "password" : "Password",
+            "connTimeout" : "Timeout di connessione",
+            "pasvTimeout" : "PASV Timeout",
+            "keepalive" : "Keepalive",
+            "secure" : "Data connection encryption",
+            "secureOptions" : "Opzioni di sicurezza"
+        }
+    },
+    "ftp_in" : {
+        "label" : {
+            "filename" : "Filename",
+            "localFilename" : "Filename locale",
+            "name" : "Nome",
+            "operation": "Operazione",
+            "add-new-ftp-server": "Server FTP",
+            "oldFilename": "Filename prececente"
+        },
+        "placeholder" : {
+            "filename" : "Filename",
+            "localFilename" : "Filename locale",
+            "name" : "Nome",
+            "oldFilename": "Filename prececente"
+        }
+    }
+}

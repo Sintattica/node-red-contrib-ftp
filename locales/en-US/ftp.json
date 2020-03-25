@@ -16,12 +16,16 @@
         "label" : {
             "filename" : "Filename",
             "localFilename" : "Local Filename",
-            "name" : "Name"
+            "name" : "Name",
+            "operation": "Operation",
+            "add-new-ftp-server": "Add new FTP Server",
+            "oldFilename": "Old Filename"
         },
         "placeholder" : {
             "filename" : "Filename",
             "localFilename" : "Local Filename",
-            "name" : "Name"
+            "name" : "Name",
+            "oldFilename": "Old Filename"
         }
     }
 }

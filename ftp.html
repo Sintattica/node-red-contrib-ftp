@@ -64,7 +64,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="ftp in">
-  <p>Allows LIST, GET, PUT and DELETE of files on a remote FTP server.</p>
+  <p>Allows LIST, GET, PUT, DELETE, MKDIR, RMDIR, APPEND, RENAME, LASTMOD of files on a remote FTP server.</p>
 
 　　<h3>Inputs</h3>
     <dl class="message-properties">
@@ -85,7 +85,7 @@
                  <dd>array of the file/folders in the user's default ftp folder</dd>
              </dl>
          </li>
-         <li>Standard output (Get, Put and Delete)
+         <li>Standard output (Get, Put, Delete and Mkdir)
              <dl class="message-properties">
                  <dt>payload <span class="property-type">string</span></dt>
                  <dd>Message that processing is complete.</dd>
@@ -103,11 +103,12 @@
     <p><code>msg.filename</code> is the path/name of the file on the remote FTP server</p>
     <p><code>msg.localFilename</code> is the path/name of the file on the local machine</p>
     <p>NOTE: the local machine is where NR is running - this might not be the machine where your browser connects to Node Red.</p>
-    <p></p> 
+    <p></p>
     <p>GET uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
     <p>PUT uses <code>msg.filename</code> and <code>msg.localFilename</code></p>
     <p>DELETE uses only <code>msg.filename</code></p>
     <p>LIST has no options and returns an array of the file/folders in the user's default ftp folder, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
+    <p>MKDIR uses <code>msg.filename</code> to specify the directory name. Recursive addition is allowed.</p>
     <p></p>
     <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
 
@@ -138,16 +139,21 @@
 
 <script type="text/x-red" data-template-name="ftp in">
   <div class="form-row">
-    <label for="node-input-ftp"><i class="fa fa-user"></i> Add new FTP Server</label>
+    <label for="node-input-ftp"><i class="fa fa-user"></i> <span data-i18n="ftp_in.label.add-new-ftp-server"></span></label>
     <input type="text" id="node-input-ftp">
   </div>
   <div class="form-row">
-    <label for="node-input-operation"><i class="fa fa-wrench"></i> Operation</label>
+    <label for="node-input-operation"><i class="fa fa-wrench"></i> <span data-i18n="ftp_in.label.operation"></span></label>
     <select type="text" id="node-input-operation">
       <option value="list">list</option>
       <option value="get">get</option>
       <option value="put">put</option>
       <option value="delete">delete</option>
+      <option value="mkdir">mkdir</option>
+      <option value="rmdir">rmdir</option>
+      <option value="append">append</option>
+      <option value="rename">rename</option>
+      <option value="lastMod">lastMod</option>
     </select>
   </div>
   <div class="form-row input-filename-row hidden">
@@ -157,6 +163,10 @@
   <div class="form-row input-localFilename-row hidden">
     <label for="node-input-localFilename"><i class="fa fa-file"></i> <span data-i18n="ftp_in.label.localFilename"></span></label>
     <input type="text" id="node-input-localFilename" data-i18n="[placeholder]ftp_in.placeholder.localFilename">
+  </div>
+  <div class="form-row input-oldFilename-row hidden">
+    <label for="node-input-oldFilename"><i class="fa fa-file"></i> <span data-i18n="ftp_in.label.oldFilename"></span></label>
+    <input type="text" id="node-input-oldFilename" data-i18n="[placeholder]ftp_in.placeholder.oldFilename">
   </div>
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="ftp_in.label.name"></span></label>
@@ -173,6 +183,7 @@
       operation: { value: 'list', required: true },
       filename: { value: '' },
       localFilename: { value: '' },
+      oldFilename: { value: '' },
       name: { value: '' }
     },
     inputs: 1,
@@ -188,18 +199,20 @@
     oneditprepare: function () {
       var filename = $(".input-filename-row");
       var localFilename = $(".input-localFilename-row");
+      var oldFilename = $(".input-oldFilename-row");
       $("#node-input-operation").change(function () {
         var id = $("#node-input-operation option:selected").val();
         console.log(id);
-        if (id == 'list') {
-          filename.hide();
-          localFilename.hide();
-        } else if (id == 'put' || id == 'get') {
-          filename.show();
+        filename.show();
+        if (id == 'put' || id == 'get' || id == 'append') {
           localFilename.show();
         } else {
-          filename.show();
           localFilename.hide();
+        }
+        if (id == 'rename') {
+          oldFilename.show();
+        } else {
+          oldFilename.hide();
         }
       });
     }

@@ -48,17 +48,23 @@ module.exports = function (RED) {
     this.operation = n.operation;
     this.filename = n.filename;
     this.localFilename = n.localFilename;
+    this.oldFilename = n.oldFilename;
     this.ftpConfig = RED.nodes.getNode(this.ftp);
 
     if (this.ftpConfig) {
       var node = this;
-      node.on('input', function (msg) {
+      node.on('input', function (msg, send, done) {
         var conn = new ftp();
         var filename = node.filename || msg.filename || '';
         var localFilename = node.localFilename || msg.localFilename || '';
+        var oldFilename = node.oldFilename || msg.oldFilename || '';
         this.sendMsg = function (err, result) {
           if (err) {
-            node.error(err, msg);
+            if (done) {
+                done(err);
+            } else {
+                node.error(err, msg);
+            }
             node.status({ fill: 'red', shape: 'ring', text: 'failed' });
             return;
           }
@@ -70,6 +76,18 @@ module.exports = function (RED) {
           } else if (node.operation == 'put') {
             conn.end();
             msg.payload = 'Put operation successful.';
+          } else if (node.operation == 'mkdir') {
+            conn.end();
+            msg.payload = 'Mkdir operation successful.';
+          } else if (node.operation == 'rmdir') {
+            conn.end();
+            msg.payload = 'Rmdir operation successful.';
+          } else if (node.operation == 'append') {
+            conn.end();
+            msg.payload = 'Append operation successful.';
+          } else if (node.operation == 'rename') {
+            conn.end();
+            msg.payload = 'Rename operation successful.';
           } else {
             conn.end();
             msg.payload = result;
@@ -81,7 +99,7 @@ module.exports = function (RED) {
         conn.on('ready', function () {
           switch (node.operation) {
             case 'list':
-              conn.list(node.sendMsg);
+	             conn.list(filename, node.sendMsg);
               break;
             case 'get':
               conn.get(filename, node.sendMsg);
@@ -92,17 +110,37 @@ module.exports = function (RED) {
             case 'delete':
               conn.delete(filename, node.sendMsg);
               break;
+            case 'mkdir':
+              conn.mkdir(filename, true, node.sendMsg);
+              break;
+            case 'rmdir':
+              conn.rmdir(filename, true, node.sendMsg);
+              break;
+            case 'append':
+              conn.append(localFilename, filename, node.sendMsg);
+              break;
+            case 'rename':
+              conn.append(oldFilename, filename, node.sendMsg);
+              break;
+            case 'lastMod':
+              conn.lastMod(filename, node.sendMsg);
+              break;
           }
         });
-        conn.on('error', function(err) { 
-          node.error(err, msg);
-          node.status({ fill: 'red', shape: 'ring', text: err.message });
+        conn.on('error', function(err) {
+          if (done) {
+              done(err);
+          } else {
+              node.error(err, msg);
+          }
+          node.status({ fill: 'red', shape: 'ring', text: 'connection error' });
           return;
         });
         conn.connect(node.ftpConfig.options);
       });
     } else {
       this.error('missing ftp configuration');
+      node.send([null, 'missing ftp configuration']);
     }
   }
   RED.nodes.registerType('ftp in', FtpInNode);

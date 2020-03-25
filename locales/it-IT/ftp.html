@@ -1,0 +1,63 @@
+<script type="text/x-red" data-help-name="ftp">
+  <p>Configurazione per connettersi ad un server FTP remoto.</p>
+  <p></p>
+  <p><code>Host</code> is The hostname or IP address of the remote FTP server. Default: <code>localhost</code></p>
+  <p><code>Porta</code> is The port of the remote FTP server. Default: <code>21</code></p>
+  <p><code>Utente</code> is Username for authentication. Default: <code>anonymous</code></p>
+  <p><code>Password</code> is Password for authentication. Required input.</p>
+  <p><code>Timeout di connessione</code> is How long (in milliseconds) to wait for the control connection to be established. Default: <code>10000</code></p>
+  <p><code>PASV Timeout</code> is How long (in milliseconds) to wait for a PASV data connection to be established. Default: <code>10000</code></p>
+  <p><code>Keepalive</code> is How often (in milliseconds) to send a 'dummy' (NOOP) command to keep the connection alive. Default: <code>10000</code></p>
+  <p><code>Data connection encryption</code> is Set to true for both control and data connection encryption. Default: <code>false</code></p>
+  <p><code>Opzioni di sicurezza</code> is Additional options to be passed to tls.connect(). Default: (none)</p>
+</script>
+
+<script type="text/x-red" data-help-name="ftp in">
+  <p>Allows LIST, GET, PUT, DELETE and MKDIR of files on a remote FTP server.</p>
+
+　　<h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">filename
+            <span class="property-type">string</span>
+        </dt>
+        <dd> è il percorso/nome del file sul server FTP remoto. </dd>
+        <dt class="optional">localFilename
+            <span class="property-type">string</span></dt>
+        <dd> è il percorso/nome del file sulla macchina locale.</dd>
+    </dl>
+
+  <h3>Outputs</h3>
+     <ol class="node-ports">
+         <li>Standard output (List)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">array</span></dt>
+                 <dd>array di file/cartelle presenti nel percorso indicato. Default: root</dd>
+             </dl>
+         </li>
+         <li>Standard output (Get, Put, Delete and Mkdir)
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">string</span></dt>
+                 <dd>Messaggio di avvenuta operazione.</dd>
+             </dl>
+         </li>
+         <li>Standard error
+             <dl class="message-properties">
+                 <dt>payload <span class="property-type">string</span></dt>
+                 <dd>Messaggio di errore.</dd>
+             </dl>
+         </li>
+     </ol>
+
+  <h3>Details</h3>
+    <p><code>msg.filename</code> è il percorso/nome del file sul server FTP remoto.</p>
+    <p><code>msg.localFilename</code> è il percorso/nome del file sulla macchina locale.</p>
+    <p>NOTA: la macchina locale è quella dove è installato Node-Red - this might not be the machine where your browser connects to Node Red.</p>
+    <p></p>
+    <p>LIST usa <code>msg.filename</code> to specify the directory name. Returns an array of the file/folders, containing type, name, sticky, rights(an object), acl, owner, group, size and date.</p>
+    <p>GET usa <code>msg.filename</code> e <code>msg.localFilename</code></p>
+    <p>PUT usa <code>msg.filename</code> e <code>msg.localFilename</code></p>
+    <p>DELETE usa <code>msg.filename</code></p>
+    <p>MKDIR usa <code>msg.filename</code> to specify the directory name. Recursive addition is allowed.</p>
+    <p></p>
+    <p>You can pass <code>msg.filename</code> and <code>msg.localFilename</code> to this node, however values entered in the node will take precedence.</p>
+</script>
