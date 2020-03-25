@@ -67,7 +67,7 @@ If the developer wants to modify the source of node-red-contrib-ftp, run the fol
 
 ```
 cd ~\.node-red\node_modules
-git clone https://github.com/joeartsea/node-red-contrib-ftp.git
+git clone https://github.com/sintattica/node-red-contrib-ftp.git
 cd node-red-contrib-ftp
 npm install
 ```
