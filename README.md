@@ -11,7 +11,7 @@ Install
 -------
 
 ```
-cd ~\.node-red\node_modules
+cd ~/.node-red/node_modules
 git clone https://github.com/sintattica/node-red-contrib-ftp.git
 cd node-red-contrib-ftp
 npm install
