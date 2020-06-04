@@ -1,11 +1,13 @@
-echo "clean working directory"
+echo "-> Clean working directory"
 git checkout .
+printf "\n"
 
-echo "update source code"
+echo "-> Update source code"
 git pull origin master
+printf "\n"
 
-echo "install dependencies"
+echo "-> Install dependencies"
 npm install
 
-echo "restar node red"
+echo "-> Restart node red"
 node-red-restart

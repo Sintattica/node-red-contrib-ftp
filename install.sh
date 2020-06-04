@@ -1,5 +1,5 @@
-echo "install dependencies"
+echo "-> install dependencies"
 npm install
 
-echo "restar node red"
+echo "-> restart node red"
 node-red-restart
