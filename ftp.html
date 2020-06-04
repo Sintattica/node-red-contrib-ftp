@@ -64,7 +64,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="ftp in">
-  <p>Allows LIST, GET, PUT, DELETE, MKDIR, RMDIR, APPEND, RENAME, LASTMOD of files on a remote FTP server.</p>
+  <p>Allows LIST, LIST-SAFE, GET, PUT, DELETE, MKDIR, RMDIR, APPEND, RENAME, LASTMOD of files on a remote FTP server.</p>
 
 　　<h3>Inputs</h3>
     <dl class="message-properties">
@@ -146,6 +146,7 @@
     <label for="node-input-operation"><i class="fa fa-wrench"></i> <span data-i18n="ftp_in.label.operation"></span></label>
     <select type="text" id="node-input-operation">
       <option value="list">list</option>
+      <option value="listSafe">listSafe</option>
       <option value="get">get</option>
       <option value="put">put</option>
       <option value="delete">delete</option>
@@ -202,7 +203,6 @@
       var oldFilename = $(".input-oldFilename-row");
       $("#node-input-operation").change(function () {
         var id = $("#node-input-operation option:selected").val();
-        console.log(id);
         filename.show();
         if (id == 'put' || id == 'get' || id == 'append') {
           localFilename.show();
