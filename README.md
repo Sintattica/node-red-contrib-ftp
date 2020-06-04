@@ -13,17 +13,23 @@ Install
 ```
 cd ~/.node-red/node_modules
 git clone https://github.com/sintattica/node-red-contrib-ftp.git
-cd node-red-contrib-ftp
-npm install
+cd node-red-contrib-ftp && sh install.sh
 ```
 
-Restart your Node-RED instance, the ftp node appears in the palette and ready for use.
+After restart your Node-RED instance, the ftp node will appears in the palette and ready for use.
 
+Update
+-------
+
+```
+cd ~/.node-red/node_modules/node-red-contrib-ftp
+sh deploy.sh
+```
 
 Usage
 -------
 
-This node will allow you to LIST, GET, PUT, DELETE, MKDIR, RMDIR, APPEND, RENAME and LASTMOD files on a remote FTP server.
+This node will allow you to LIST, LIST-SAFE, GET, PUT, DELETE, MKDIR, RMDIR, APPEND, RENAME and LASTMOD files on a remote FTP server.
 
 The GET and PUT options use msg.filename (the path/name of the file on the remote machine) and msg.localFilename (the path/name of the file on the local machine - i.e. the one running NR).
 
