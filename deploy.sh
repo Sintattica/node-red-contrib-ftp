@@ -1,11 +1,11 @@
-# revert di tutte le modifiche
+echo "clean working directory"
 git checkout .
 
-# update codice sorgente
+echo "update source code"
 git pull origin master
 
-# installa dependencies
+echo "install dependencies"
 npm install
 
-# restart node-red
+echo "restar node red"
 node-red-restart

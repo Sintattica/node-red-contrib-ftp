@@ -1,5 +1,5 @@
-# installa dependencies
+echo "install dependencies"
 npm install
 
-# restart node-red
+echo "restar node red"
 node-red-restart
